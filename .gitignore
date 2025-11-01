@@ -1,0 +1,26 @@
+### Gradle ###
+.gradle/
+build/
+!gradlew
+!gradlew.bat
+gradle/
+!gradle/wrapper/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+gradletasknamecache
+gradle-app.setting
+
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+
+.idea/
+
+# Старые форматы
+*.iws
+*.iml
+*.ipr
