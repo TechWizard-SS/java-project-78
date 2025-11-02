@@ -7,7 +7,7 @@ public class NumberSchema extends BaseSchema<Integer> {
 
 
     @Override
-    public NumberSchema required() { // для сохранения типа, иначе возвр. BaseSchema<Integer>
+    public NumberSchema required() { // для сохранения типа, иначе возвращает BaseSchema<Integer>
         super.required();
         return this;
     }
