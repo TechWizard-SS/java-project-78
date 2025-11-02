@@ -4,9 +4,8 @@ public class StringSchema extends BaseSchema<String> {
     private Integer minLength = null;
     private String contains = null;
 
-
     @Override
-    public StringSchema required() {  // для сохранения типа, иначе возвращается BaseSchema<String>
+    public StringSchema required() {
         super.required();
         return this;
     }
@@ -22,20 +21,25 @@ public class StringSchema extends BaseSchema<String> {
     }
 
     @Override
-    public boolean isValid(String value) {
-        // null или empty валидны только без required
-        if (!required && (value == null || value.isEmpty())) {
+    public boolean isValid(Object value) {  // Object (уже ок)
+        if (!required && (value == null || (value instanceof String && ((String) value).isEmpty()))) {
             return true;
         }
-        // null или empty невалидны с required
-        if (value == null || value.isEmpty()) {
+        if (value == null) {
             return false;
         }
-        // Правила применяются для non-null non-empty
-        if (minLength != null && value.length() < minLength) {
+        if (!(value instanceof String)) {  // ← Edge: wrong type → false
             return false;
         }
-        if (contains != null && !value.contains(contains)) {
+        String str = (String) value;  // Cast после check
+        if (str.isEmpty()) {
+            return false;
+        }
+        // Правила для non-null non-empty
+        if (minLength != null && str.length() < minLength) {
+            return false;
+        }
+        if (contains != null && !str.contains(contains)) {
             return false;
         }
         return true;

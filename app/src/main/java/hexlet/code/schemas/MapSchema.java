@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class MapSchema extends BaseSchema<Map> {
     private Integer expectedSize = null;
-    private Map<String, BaseSchema> fields = null;  // Raw BaseSchema для под-схем (StringSchema/NumberSchema)
+    private Map<String, BaseSchema<?>> fields = null;
 
     @Override
     public MapSchema required() {
@@ -18,38 +18,36 @@ public class MapSchema extends BaseSchema<Map> {
         return this;
     }
 
-    public MapSchema shape(Map<String, BaseSchema> schemas) {  // Raw для простоты
-        this.fields = new HashMap<>(schemas);  // Копируем
+    public MapSchema shape(Map<String, BaseSchema<?>> schemas) {
+        this.fields = new HashMap<>(schemas);
         return this;
     }
 
     @Override
-    public boolean isValid(Map value) {  // Raw Map value
-        // Базовая логика (твоя, без изменений)
-        if (value == null && !required) {
+    public boolean isValid(Object value) {  // ← Object (override)
+        Map mapValue = (Map) value;  // Cast для Map (safety)
+        if (mapValue == null && !required) {
             return true;
         }
-        if (value == null) {
+        if (mapValue == null) {
             return false;
         }
-        if (expectedSize != null && value.size() != expectedSize) {
+        if (expectedSize != null && mapValue.size() != expectedSize) {
             return false;
         }
-        // Shape: проверяем ожидаемые ключи
-        if (fields != null) {
-            for (Map.Entry<String, BaseSchema> entry : fields.entrySet()) {
-                String key = entry.getKey();
-                BaseSchema schema = entry.getValue();
-                Object val = value.get(key);  // Может быть String/Integer/null
 
-                @SuppressWarnings("unchecked")
-                boolean valid = schema.isValid(val);
+        if (fields != null) {
+            for (Map.Entry<String, BaseSchema<?>> entry : fields.entrySet()) {
+                String key = entry.getKey();
+                BaseSchema<?> schema = entry.getValue();
+                Object val = mapValue.get(key);  // Object
+
+                boolean valid = schema.isValid(val);  // ← Без cast/suppress — Object ok
                 if (!valid) {
                     return false;
                 }
             }
         }
-
         return true;
     }
 }
