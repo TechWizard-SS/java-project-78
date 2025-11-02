@@ -1,9 +1,10 @@
 plugins {
     application
     checkstyle
-    id("org.sonarqube") version "6.3.1.5724"}
+    id("org.sonarqube") version "7.0.1.6134"
+}
 
-group = "code"
+group = "hexlet.code"
 version = "1.0-SNAPSHOT"
 
 java {
@@ -37,23 +38,14 @@ tasks.checkstyleTest {
 
 checkstyle {
     toolVersion = "10.12.1"
-    configFile = file("config/checkstyle/checkstyle.xml")
+    configFile = file("Config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
     isShowViolations = true
 }
 
 sonar {
     properties {
-        property("sonar.projectKey", "TechWizard-SS_java-project-71")
+        property("sonar.projectKey", "TechWizard-SS_java-project-78")
         property("sonar.organization", "techwizard-ss")
-        property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.sources", "src/main")
-        property("sonar.tests", "src/test")
-        property("sonar.java.binaries", "build/classes/java/main")
-        property("sonar.java.test.binaries", "build/classes/java/test")
-        property("sonar.java.test.reportPaths", "build/test-results/test")
-        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
-        property("sonar.exclusions", "**/build/**,**/generated/**")
-        property("sonar.verbose", "true")
     }
 }
