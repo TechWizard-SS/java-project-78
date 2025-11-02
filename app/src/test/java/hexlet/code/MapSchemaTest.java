@@ -1,75 +1,165 @@
 package hexlet.code;
 
+import hexlet.code.schemas.BaseSchema;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MapSchemaTest {
+
     @Test
-    public void testBasicValidation() {
+    public void testValidNullWithoutRequired() {
         var v = new Validator();
         var schema = v.map();
 
         assertTrue(schema.isValid(null));
-
     }
 
     @Test
-    public void testBasicValidation1() {
+    public void testInvalidNullWithRequired() {
         var v = new Validator();
-        var schema = v.map();
-
-        schema.required();
+        var schema = v.map().required();
 
         assertFalse(schema.isValid(null));
-
     }
 
     @Test
-    public void testBasicValidation2() {
+    public void testValidEmptyMapWithoutRequired() {
         var v = new Validator();
         var schema = v.map();
-
-        schema.isValid(new HashMap<>());
 
         assertTrue(schema.isValid(new HashMap<>()));
     }
 
     @Test
-    public void testBasicValidation3() {
-        var v = new Validator();
-        var schema = v.map();
-
-        var data = new HashMap<String, String>();
-        data.put("key2", "value2");
-        assertTrue(schema.isValid(data));
-    }
-
-    @Test
-    public void testBasicValidation4() {
-        var v = new Validator();
-        var schema = v.map();
-
-        var data = new HashMap<String, String>();
-        data.put("key2", "value2");
-        schema.sizeof(2);
-
-        assertFalse(schema.isValid(data));
-    }
-
-    @Test
-    public void testBasicValidation5() {
+    public void testValidNonEmptyMapWithoutRequired() {
         var v = new Validator();
         var schema = v.map();
 
         var data = new HashMap<String, String>();
         data.put("key1", "value1");
-        data.put("key2", "value2");
-        schema.sizeof(2);
+        assertTrue(schema.isValid(data));
+    }
 
+    @Test
+    public void testInvalidSizeWithSizeof() {
+        var v = new Validator();
+        var schema = v.map().sizeof(2);
+
+        var data = new HashMap<String, String>();
+        data.put("key1", "value1");
+        assertFalse(schema.isValid(data));
+    }
+
+    @Test
+    public void testValidSizeWithSizeof() {
+        var v = new Validator();
+        var schema = v.map().sizeof(2);
+
+        var data = new HashMap<String, String>();
+        data.put("key1", "value1");
+        data.put("key2", "value2");
+        assertTrue(schema.isValid(data));
+    }
+
+    @Test
+    public void testShapeBasicExamples() {
+        var v = new Validator();
+
+        Map<String, BaseSchema> schemas = new HashMap<>();
+        schemas.put("firstName", v.string().required());
+        schemas.put("lastName", v.string().required().minLength(2));
+
+        var schema = v.map().shape(schemas);
+
+        Map<String, String> human1 = new HashMap<>();
+        human1.put("firstName", "John");
+        human1.put("lastName", "Smith");
+        assertTrue(schema.isValid(human1));
+
+        Map<String, String> human2 = new HashMap<>();
+        human2.put("firstName", "John");
+        human2.put("lastName", null);
+        assertFalse(schema.isValid(human2));
+
+        Map<String, String> human3 = new HashMap<>();
+        human3.put("firstName", "Anna");
+        human3.put("lastName", "B");
+        assertFalse(schema.isValid(human3));
+    }
+
+    @Test
+    public void testShapeWithNumberSchema() {
+        var v = new Validator();
+
+        Map<String, BaseSchema> schemas = new HashMap<>();
+        schemas.put("name", v.string().required());
+        schemas.put("age", v.number().positive().range(18, 65));
+
+        var schema = v.map().shape(schemas);
+
+        Map<String, Object> human = new HashMap<>();
+        human.put("name", "John");
+        human.put("age", 30);
+        assertTrue(schema.isValid(human));
+
+        human.put("age", 10);
+        assertFalse(schema.isValid(human));
+    }
+
+    @Test
+    public void testShapeCombinedWithSizeof() {
+        var v = new Validator();
+
+        Map<String, BaseSchema> schemas = new HashMap<>();
+        schemas.put("firstName", v.string().required());
+        schemas.put("lastName", v.string().required());
+
+        var schema = v.map().required().sizeof(2).shape(schemas);
+
+        Map<String, String> human = new HashMap<>();
+        human.put("firstName", "John");
+        human.put("lastName", "Smith");
+        assertTrue(schema.isValid(human));
+
+        human.put("age", "30");
+        assertFalse(schema.isValid(human));
+    }
+
+    @Test
+    public void testShapeWithMissingAndExtraKeys() {
+        var v = new Validator();
+
+        Map<String, BaseSchema> schemas = new HashMap<>();
+        schemas.put("firstName", v.string().required());
+
+        var schema = v.map().shape(schemas);
+
+        Map<String, String> human = new HashMap<>();
+        human.put("lastName", "Smith");
+        assertFalse(schema.isValid(human));
+
+        human.put("firstName", "John");
+        human.put("extra", "ignored");
+        assertTrue(schema.isValid(human));
+    }
+
+    @Test
+    public void testRequiredCombinedWithSizeof() {
+        var v = new Validator();
+        var schema = v.map().required().sizeof(0);
+
+        assertTrue(schema.isValid(new HashMap<>()));
+
+        var data = new HashMap<String, String>();
+        data.put("key1", "value1");
+        assertFalse(schema.isValid(data));
+
+        schema.sizeof(1);
         assertTrue(schema.isValid(data));
     }
 }
