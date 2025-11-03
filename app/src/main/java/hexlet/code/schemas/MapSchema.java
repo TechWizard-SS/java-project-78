@@ -18,7 +18,8 @@ public class MapSchema extends BaseSchema<Map<?, ?>> {
         return this;
     }
 
-    public MapSchema shape(Map<String, BaseSchema<?>> schemas) {
+    // Ключевой момент: ? extends BaseSchema<?>
+    public MapSchema shape(Map<String, ? extends BaseSchema<?>> schemas) {
         this.fields = new HashMap<>(schemas);
         return this;
     }
@@ -28,10 +29,7 @@ public class MapSchema extends BaseSchema<Map<?, ?>> {
         if (value == null && !required) {
             return true;
         }
-        if (value == null) {
-            return false;
-        }
-        if (!(value instanceof Map<?, ?>)) {
+        if (!(value instanceof Map)) {
             return false;
         }
 
