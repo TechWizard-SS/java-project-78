@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class MapSchema extends BaseSchema<Map> {
     private Integer expectedSize = null;
-    private Map<String, BaseSchema> fields = null;  // ← Raw BaseSchema (для совместимости с typed тестами)
+    private Map<String, BaseSchema> fields = null;
 
     @Override
     public MapSchema required() {
@@ -19,7 +19,7 @@ public class MapSchema extends BaseSchema<Map> {
     }
 
     @SuppressWarnings("unchecked")  // ← Suppress unchecked для raw + typed Map
-    public MapSchema shape(Map<String, BaseSchema> schemas) {  // ← Raw BaseSchema (принимает BaseSchema<String> из теста)
+    public MapSchema shape(Map<String, BaseSchema> schemas) {
         this.fields = new HashMap<>(schemas);
         return this;
     }
@@ -40,11 +40,11 @@ public class MapSchema extends BaseSchema<Map> {
             return false;
         }
         if (fields != null) {
-            for (Map.Entry<String, BaseSchema> entry : fields.entrySet()) {  // Raw loop
+            for (Map.Entry<String, BaseSchema> entry : fields.entrySet()) {
                 String key = entry.getKey();
-                BaseSchema schema = entry.getValue();  // Raw
+                BaseSchema schema = entry.getValue();
                 Object val = mapValue.get(key);
-                boolean valid = schema.isValid(val);  // Object ok
+                boolean valid = schema.isValid(val);
                 if (!valid) {
                     return false;
                 }
