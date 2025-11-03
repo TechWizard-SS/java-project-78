@@ -1,12 +1,15 @@
-package hexlet.code;
-
+//package hexlet.code;
+//
+//import hexlet.code.schemas.BaseSchema;
 //import org.junit.jupiter.api.Test;
 //import java.util.HashMap;
+//import java.util.Map;
+//
 //import static org.junit.jupiter.api.Assertions.assertFalse;
 //import static org.junit.jupiter.api.Assertions.assertTrue;
-
+//
 //public class MapSchemaTest {
-
+//
 //    @Test
 //    public void testValidNullWithoutRequired() {
 //        var v = new Validator();
@@ -61,12 +64,12 @@ package hexlet.code;
 //        data.put("key2", "value2");
 //        assertTrue(schema.isValid(data));
 //    }
-
+//
 //    @Test
 //    public void testShapeBasicExamples() {
 //        var v = new Validator();
 //
-//        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Уже ok
+//        Map<String, BaseSchema<?>> schemas = new HashMap<>();
 //        schemas.put("firstName", v.string().required());
 //        schemas.put("lastName", v.string().required().minLength(2));
 //
@@ -92,7 +95,7 @@ package hexlet.code;
 //    public void testShapeWithNumberSchema() {
 //        var v = new Validator();
 //
-//        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Уже ok
+//        Map<String, BaseSchema<?>> schemas = new HashMap<>();
 //        schemas.put("name", v.string().required());
 //        schemas.put("age", v.number().positive().range(18, 65));
 //
@@ -111,7 +114,7 @@ package hexlet.code;
 //    public void testShapeCombinedWithSizeof() {
 //        var v = new Validator();
 //
-//        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Фикс: wildcard ? вместо BaseSchema<String>
+//        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Фикс: wildcard ?
 //        schemas.put("firstName", v.string().required());
 //        schemas.put("lastName", v.string().required());
 //
@@ -130,7 +133,7 @@ package hexlet.code;
 //    public void testShapeWithMissingAndExtraKeys() {
 //        var v = new Validator();
 //
-//        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Фикс: wildcard ? вместо BaseSchema<>
+//        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Фикс: wildcard ?
 //        schemas.put("firstName", v.string().required());
 //
 //        var schema = v.map().shape(schemas);
@@ -157,5 +160,28 @@ package hexlet.code;
 //
 //        schema.sizeof(1);
 //        assertTrue(schema.isValid(data));
+//    }
+//
+//    // Опционально: тест на override shape (для полного покрытия)
+//    @Test
+//    public void testShapeOverride() {
+//        var v = new Validator();
+//        var schema = v.map();
+//
+//        Map<String, BaseSchema<?>> schemas1 = new HashMap<>();
+//        schemas1.put("key1", v.string().required());
+//        schema.shape(schemas1);
+//
+//        Map<String, BaseSchema<?>> schemas2 = new HashMap<>();
+//        schemas2.put("key2", v.string().minLength(3));
+//        schema.shape(schemas2);  // Override
+//
+//        Map<String, String> data = new HashMap<>();
+//        data.put("key1", "a");  // extra, ignored
+//        data.put("key2", "abc");
+//        assertTrue(schema.isValid(data));
+//
+//        data.put("key2", "ab");  // <3
+//        assertFalse(schema.isValid(data));
 //    }
 //}
