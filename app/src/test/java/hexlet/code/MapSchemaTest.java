@@ -68,7 +68,7 @@ public class MapSchemaTest {
     public void testShapeBasicExamples() {
         var v = new Validator();
 
-        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Фикс: wildcard ? для BaseSchema<T>
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
         schemas.put("firstName", v.string().required());
         schemas.put("lastName", v.string().required().minLength(2));
 
@@ -94,7 +94,7 @@ public class MapSchemaTest {
     public void testShapeWithNumberSchema() {
         var v = new Validator();
 
-        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Фикс: wildcard ?
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
         schemas.put("name", v.string().required());
         schemas.put("age", v.number().positive().range(18, 65));
 
@@ -113,7 +113,7 @@ public class MapSchemaTest {
     public void testShapeCombinedWithSizeof() {
         var v = new Validator();
 
-        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Фикс: wildcard ?
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
         schemas.put("firstName", v.string().required());
         schemas.put("lastName", v.string().required());
 
@@ -132,7 +132,7 @@ public class MapSchemaTest {
     public void testShapeWithMissingAndExtraKeys() {
         var v = new Validator();
 
-        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Фикс: wildcard ?
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
         schemas.put("firstName", v.string().required());
 
         var schema = v.map().shape(schemas);

@@ -3,7 +3,7 @@ package hexlet.code.schemas;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapSchema extends BaseSchema<Map> {
+public class MapSchema extends BaseSchema<Object> {
     private Integer expectedSize = null;
     private Map<String, BaseSchema<?>> fields = null;
 
@@ -25,7 +25,6 @@ public class MapSchema extends BaseSchema<Map> {
 
     @Override
     public boolean isValid(Object value) {
-        // Сначала null-логика (специальный случай)
         if (value == null && !required) {
             return true;
         }
@@ -33,18 +32,15 @@ public class MapSchema extends BaseSchema<Map> {
             return false;
         }
 
-        // Потом type-check + cast (для non-null)
         if (!(value instanceof Map)) {
-            return false;  // Edge: wrong type
+            return false;
         }
         Map mapValue = (Map) value;
 
-        // Базовая логика для non-null Map
         if (expectedSize != null && mapValue.size() != expectedSize) {
             return false;
         }
 
-        // Shape для non-null Map
         if (fields != null) {
             for (Map.Entry<String, BaseSchema<?>> entry : fields.entrySet()) {
                 String key = entry.getKey();
