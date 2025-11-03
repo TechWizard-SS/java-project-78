@@ -24,25 +24,34 @@ public class MapSchema extends BaseSchema<Map> {
     }
 
     @Override
-    public boolean isValid(Object value) {  // ← Object (override)
-        Map mapValue = (Map) value;  // Cast для Map (safety)
-        if (mapValue == null && !required) {
+    public boolean isValid(Object value) {
+        // Сначала null-логика (специальный случай)
+        if (value == null && !required) {
             return true;
         }
-        if (mapValue == null) {
+        if (value == null) {
             return false;
         }
+
+        // Потом type-check + cast (для non-null)
+        if (!(value instanceof Map)) {
+            return false;  // Edge: wrong type
+        }
+        Map mapValue = (Map) value;
+
+        // Базовая логика для non-null Map
         if (expectedSize != null && mapValue.size() != expectedSize) {
             return false;
         }
 
+        // Shape для non-null Map
         if (fields != null) {
             for (Map.Entry<String, BaseSchema<?>> entry : fields.entrySet()) {
                 String key = entry.getKey();
                 BaseSchema<?> schema = entry.getValue();
-                Object val = mapValue.get(key);  // Object
+                Object val = mapValue.get(key);
 
-                boolean valid = schema.isValid(val);  // ← Без cast/suppress — Object ok
+                boolean valid = schema.isValid(val);
                 if (!valid) {
                     return false;
                 }

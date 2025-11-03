@@ -16,7 +16,7 @@ public class NumberSchema extends BaseSchema<Integer> {
         return this;
     }
 
-    public NumberSchema range(int lower, int upper) {  // ← Переименуй для Checkstyle
+    public NumberSchema range(int lower, int upper) {
         if (lower > upper) {
             throw new IllegalArgumentException("min should not be greater than max");
         }
@@ -26,25 +26,24 @@ public class NumberSchema extends BaseSchema<Integer> {
     }
 
     @Override
-    public boolean isValid(Object value) {  // ← Object (override)
+    public boolean isValid(Object value) {
         if (value == null && !required) {
             return true;
         }
         if (value == null) {
             return false;
         }
-        if (!(value instanceof Integer)) {  // ← Edge: wrong type → false
-            return false;
+        if (!(value instanceof Integer)) {
+            return false;  // Edge: wrong type
         }
-        Integer num = (Integer) value;  // Cast после check
-
+        Integer num = (Integer) value;
         if (positive && num <= 0) {
             return false;
         }
-        if (this.min != null && num < this.min) {
+        if (min != null && num < min) {
             return false;
         }
-        if (this.max != null && num > this.max) {
+        if (max != null && num > max) {
             return false;
         }
         return true;

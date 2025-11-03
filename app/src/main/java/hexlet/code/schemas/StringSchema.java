@@ -21,21 +21,20 @@ public class StringSchema extends BaseSchema<String> {
     }
 
     @Override
-    public boolean isValid(Object value) {  // Object (уже ок)
+    public boolean isValid(Object value) {
         if (!required && (value == null || (value instanceof String && ((String) value).isEmpty()))) {
             return true;
         }
         if (value == null) {
             return false;
         }
-        if (!(value instanceof String)) {  // ← Edge: wrong type → false
-            return false;
+        if (!(value instanceof String)) {
+            return false;  // Edge: wrong type
         }
-        String str = (String) value;  // Cast после check
+        String str = (String) value;
         if (str.isEmpty()) {
             return false;
         }
-        // Правила для non-null non-empty
         if (minLength != null && str.length() < minLength) {
             return false;
         }
