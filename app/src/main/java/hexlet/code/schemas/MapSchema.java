@@ -20,7 +20,7 @@ public final class MapSchema extends BaseSchema<Map<String, Object>> {
         return this;
     }
 
-    public MapSchema shape(Map<String, BaseSchema<?>> schemas) {
+    public MapSchema shape(Map<String, ? extends BaseSchema<?>> schemas) {
         this.fields = new HashMap<>(schemas);
         addCheck("shape", map -> {
             if (map == null) {
