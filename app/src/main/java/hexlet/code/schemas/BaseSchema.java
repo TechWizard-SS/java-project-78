@@ -1,5 +1,9 @@
 package hexlet.code.schemas;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Predicate;
+
 /**
  * Базовый класс для всех схем валидации.
  * Содержит общие методы и флаг обязательности значения.
@@ -7,23 +11,54 @@ package hexlet.code.schemas;
  * @param <T> тип данных, с которым работает схема
  */
 public abstract class BaseSchema<T> {
+
+    protected final Map<String, Predicate<T>> checks = new LinkedHashMap<>();
     protected boolean required = false;
 
     /**
-     * Делает поле обязательным для проверки.
+     * Добавляет новое правило проверки в схему.
      *
-     * @return текущий объект схемы
+     * @param name имя проверки
+     * @param validate предикат для проверки значения
      */
-    public BaseSchema<T> required() {
-        this.required = true;
-        return this;
+    protected final void addCheck(String name, Predicate<T> validate) {
+        checks.put(name, validate);
     }
 
     /**
-     * Проверяет корректность значения в зависимости от типа схемы.
+     * Проверяет значение по всем добавленным условиям.
+     * Принимает Object, чтобы можно было вызывать isValid на BaseSchema<?>.
      *
-     * @param value значение для проверки
-     * @return true, если значение корректно, иначе false
+     * @param value проверяемое значение
+     * @return true, если все проверки пройдены
      */
-    public abstract boolean isValid(Object value);
+    @SuppressWarnings("unchecked")
+    public final boolean isValid(Object value) {
+        if (value == null && !required) {
+            return true;
+        }
+        if (value == null) {
+            return false;
+        }
+
+        // unchecked cast — приемлем в этой архитектуре: предикаты соответствуют типу схемы
+        T val = (T) value;
+
+        for (Predicate<T> check : checks.values()) {
+            if (!check.test(val)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Помечает схему как обязательную.
+     *
+     * @return этот экземпляр схемы для объединения методов в цепочку
+     */
+    public BaseSchema<T> required() {
+        required = true;
+        return this;
+    }
 }
