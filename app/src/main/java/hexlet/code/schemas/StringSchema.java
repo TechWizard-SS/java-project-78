@@ -1,6 +1,6 @@
 package hexlet.code.schemas;
 
-public class StringSchema extends BaseSchema<String> {
+public final class StringSchema extends BaseSchema<String> {
     private Integer minLength = null;
     private String contains = null;
 
@@ -29,7 +29,7 @@ public class StringSchema extends BaseSchema<String> {
             return false;
         }
         if (!(value instanceof String)) {
-            return false;  // Edge: wrong type
+            return false;
         }
         String str = (String) value;
         if (str.isEmpty()) {

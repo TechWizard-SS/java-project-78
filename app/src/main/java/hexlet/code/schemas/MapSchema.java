@@ -3,7 +3,7 @@ package hexlet.code.schemas;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapSchema extends BaseSchema<Map<?, ?>> {
+public final class MapSchema extends BaseSchema<Map<?, ?>> {
     private Integer expectedSize = null;
     private Map<String, BaseSchema<?>> fields = null;
 
@@ -18,7 +18,6 @@ public class MapSchema extends BaseSchema<Map<?, ?>> {
         return this;
     }
 
-    // Ключевой момент: ? extends BaseSchema<?>
     public MapSchema shape(Map<String, ? extends BaseSchema<?>> schemas) {
         this.fields = new HashMap<>(schemas);
         return this;
@@ -34,7 +33,6 @@ public class MapSchema extends BaseSchema<Map<?, ?>> {
         }
 
         Map<?, ?> mapValue = (Map<?, ?>) value;
-
         if (expectedSize != null && mapValue.size() != expectedSize) {
             return false;
         }

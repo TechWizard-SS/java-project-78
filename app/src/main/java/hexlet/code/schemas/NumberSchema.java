@@ -1,6 +1,6 @@
 package hexlet.code.schemas;
 
-public class NumberSchema extends BaseSchema<Integer> {
+public final class NumberSchema extends BaseSchema<Integer> {
     private boolean positive = false;
     private Integer min = null;
     private Integer max = null;
@@ -30,11 +30,8 @@ public class NumberSchema extends BaseSchema<Integer> {
         if (value == null && !required) {
             return true;
         }
-        if (value == null) {
-            return false;
-        }
         if (!(value instanceof Integer)) {
-            return false;  // Edge: wrong type
+            return false;
         }
         Integer num = (Integer) value;
         if (positive && num <= 0) {
