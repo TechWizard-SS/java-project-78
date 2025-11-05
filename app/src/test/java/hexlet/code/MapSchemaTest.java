@@ -114,7 +114,7 @@ public class MapSchemaTest {
     public void testShapeCombinedWithSizeof() {
         var v = new Validator();
 
-        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Фикс: wildcard ?
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
         schemas.put("firstName", v.string().required());
         schemas.put("lastName", v.string().required());
 
@@ -133,7 +133,7 @@ public class MapSchemaTest {
     public void testShapeWithMissingAndExtraKeys() {
         var v = new Validator();
 
-        Map<String, BaseSchema<?>> schemas = new HashMap<>();  // ← Фикс: wildcard ?
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
         schemas.put("firstName", v.string().required());
 
         var schema = v.map().shape(schemas);
@@ -162,7 +162,6 @@ public class MapSchemaTest {
         assertTrue(schema.isValid(data));
     }
 
-    // Опционально: тест на override shape (для полного покрытия)
     @Test
     public void testShapeOverride() {
         var v = new Validator();
@@ -174,14 +173,14 @@ public class MapSchemaTest {
 
         Map<String, BaseSchema<?>> schemas2 = new HashMap<>();
         schemas2.put("key2", v.string().minLength(3));
-        schema.shape(schemas2);  // Override
+        schema.shape(schemas2);
 
         Map<String, String> data = new HashMap<>();
-        data.put("key1", "a");  // extra, ignored
+        data.put("key1", "a");
         data.put("key2", "abc");
         assertTrue(schema.isValid(data));
 
-        data.put("key2", "ab");  // <3
+        data.put("key2", "ab");
         assertFalse(schema.isValid(data));
     }
 }

@@ -41,7 +41,6 @@ public abstract class BaseSchema<T> {
             return false;
         }
 
-        // unchecked cast — приемлем в этой архитектуре: предикаты соответствуют типу схемы
         T val = (T) value;
 
         for (Predicate<T> check : checks.values()) {
