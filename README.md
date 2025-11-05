@@ -55,16 +55,10 @@ System.out.println(numberSchema.isValid(7)); // true
 // Проверка Map
 var mapSchema = v.map().sizeof(2);
 
-🛠️ Технологии
-
+### Технологии
 Java 21
-
 Gradle
-
 JUnit 5
-
 JaCoCo (покрытие тестами)
-
 Checkstyle
-
 SonarCloud
