@@ -57,8 +57,13 @@ var mapSchema = v.map().sizeof(2);
 
 ### Технологии
 Java 21
+
 Gradle
+
 JUnit 5
+
 JaCoCo (покрытие тестами)
+
 Checkstyle
+
 SonarCloud
