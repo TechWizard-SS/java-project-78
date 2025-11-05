@@ -30,16 +30,16 @@ Java Project 78 — это мини-библиотека для декларат
 Проверка карт (Map): required(), sizeof(), shape()
 (где shape позволяет валидировать вложенные структуры)
 
-Установка и запуск
-# Клонировать репозиторий
+## Установка и запуск
+### Клонировать репозиторий
 git clone https://github.com/TechWizard-SS/java-project-78.git
 cd java-project-78
 
-# Сборка и запуск тестов
+### Сборка и запуск тестов
 ./gradlew build
 ./gradlew test
 
-# Пример использования
+### Пример использования
 import hexlet.code.Validator;
 
 var v = new Validator();
