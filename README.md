@@ -13,57 +13,97 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=TechWizard-SS_java-project-78&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=TechWizard-SS_java-project-78)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=TechWizard-SS_java-project-78&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=TechWizard-SS_java-project-78)
 
-Описание проекта
+# Java Project 78 — Декларативная валидация данных
 
-Java Project 78 — это мини-библиотека для декларативной валидации данных.
-Она позволяет создавать схемы проверки (string, number, map) и применять к ним гибкие правила.
+**Java Project 78** — это мини-библиотека для декларативной валидации данных.  
+Она позволяет создавать схемы проверки (`string`, `number`, `map`) и применять к ним гибкие правила.  
+Библиотека демонстрирует работу с дженериками, функциональными интерфейсами, лямбдами и коллекциями в Java.  
 
-Библиотека демонстрирует работу с дженериками, функциональными интерфейсами, лямбдами и коллекциями в Java.
-Проект создан в рамках курса «Java-разработчик» от Hexlet.
+Проект создан в рамках курса **«Java-разработчик»** от [Hexlet](https://ru.hexlet.io).
 
-Основные возможности
+---
 
-Проверка строк: required(), minLength(), contains()
+## Основные возможности
 
-Проверка чисел: required(), positive(), range()
+### Проверка строк
+```java
+string().required()     // обязательное поле
+        .minLength(5)   // минимальная длина
+        .contains("hex") // содержит подстроку
+```
 
-Проверка карт (Map): required(), sizeof(), shape()
-(где shape позволяет валидировать вложенные структуры)
+### Проверка чисел
+```java
+number().required()     // обязательное поле
+        .positive()     // положительное
+        .range(5, 10)   // диапазон
+```
+
+### Проверка карт (Map)
+```java
+map().required()        // обязательное поле
+     .sizeof(2)         // точный размер
+     .shape(...)        // валидация вложенных структур
+```
+
+> `shape()` позволяет задавать схемы для каждого ключа карты — рекурсивная валидация вложенных объектов.
+
+---
 
 ## Установка и запуск
-### Клонировать репозиторий
+
+### 1. Клонировать репозиторий
+```bash
 git clone https://github.com/TechWizard-SS/java-project-78.git
 cd java-project-78
+```
 
-### Сборка и запуск тестов
+### 2. Сборка проекта
+```bash
 ./gradlew build
-./gradlew test
+```
 
-### Пример использования
+### 3. Запуск тестов
+```bash
+./gradlew test
+```
+
+---
+
+## Пример использования
+
+```java
 import hexlet.code.Validator;
 
-var v = new Validator();
+public class Example {
+    public static void main(String[] args) {
+        var v = new Validator();
 
-// Проверка строк
-var stringSchema = v.string().required().minLength(5).contains("hex");
-System.out.println(stringSchema.isValid("hexlet")); // true
+        // Проверка строк
+        var stringSchema = v.string().required().minLength(5).contains("hex");
+        System.out.println(stringSchema.isValid("hexlet")); // true
+        System.out.println(stringSchema.isValid("java"));  // false
 
-// Проверка чисел
-var numberSchema = v.number().required().positive().range(5, 10);
-System.out.println(numberSchema.isValid(7)); // true
+        // Проверка чисел
+        var numberSchema = v.number().required().positive().range(5, 10);
+        System.out.println(numberSchema.isValid(7));  // true
+        System.out.println(numberSchema.isValid(-5)); // false
 
-// Проверка Map
-var mapSchema = v.map().sizeof(2);
+        // Проверка Map
+        var mapSchema = v.map().required().sizeof(2);
+        Map<String, String> data = Map.of("key1", "value1", "key2", "value2");
+        System.out.println(mapSchema.isValid(data)); // true
+    }
+}
+```
 
-### Технологии
-Java 21
+---
 
-Gradle
+## Технологии
 
-JUnit 5
-
-JaCoCo (покрытие тестами)
-
-Checkstyle
-
-SonarCloud
+- **Java 21**
+- **Gradle** — система сборки
+- **JUnit 5** — тестирование
+- **JaCoCo** — измерение покрытия тестами
+- **Checkstyle** — проверка стиля кода
+- **SonarCloud** — статический анализ кода
