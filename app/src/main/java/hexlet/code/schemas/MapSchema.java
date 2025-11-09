@@ -1,10 +1,8 @@
 package hexlet.code.schemas;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public final class MapSchema extends BaseSchema<Map<?, ?>> {
-    private Map<String, BaseSchema<?>> fields = null;
 
     @Override
     public MapSchema required() {
@@ -18,14 +16,12 @@ public final class MapSchema extends BaseSchema<Map<?, ?>> {
     }
 
     public MapSchema shape(Map<String, ? extends BaseSchema<?>> schemas) {
-        this.fields = new HashMap<>(schemas);
         addCheck("shape", map -> {
-            for (var entry : fields.entrySet()) {
+            for (var entry : schemas.entrySet()) {
                 String key = entry.getKey();
                 BaseSchema<?> schema = entry.getValue();
-                Object val = map.get(key);
-
-                boolean valid = ((BaseSchema<Object>) schema).isValid(val);
+                Object value = map.get(key);
+                boolean valid = ((BaseSchema<Object>) schema).isValid(value);
                 if (!valid) {
                     return false;
                 }
